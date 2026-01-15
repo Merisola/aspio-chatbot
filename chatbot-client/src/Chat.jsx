@@ -2,9 +2,18 @@ import { useState, useRef, useEffect } from "react";
 import ReactMarkdown from "react-markdown";
 
 export default function Chat() {
-  const [messages, setMessages] = useState([
-    { role: "bot", text: "Hello! I’m your bot." },
-  ]);
+const [messages, setMessages] = useState([
+  {
+    role: "bot",
+    text: `You can ask things like:
+- Tell me about Aspio
+- What is Aspio?
+- What is booking?
+- How does Aspio help my business?
+- What is the advantage of booking for my business?`,
+  },
+]);
+
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -32,7 +41,7 @@ export default function Chat() {
     setError(null);
 
     try {
-      const res = await fetch("/chat", {
+      const res = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -75,20 +84,28 @@ export default function Chat() {
             msg.role === "bot" ? (
               <div
                 key={index}
-                className="self-start bg-gray-200 text-gray-800 px-3 py-2 rounded-lg max-w-[70%] break-words whitespace-pre-wrap"
+                className="self-start bg-gray-200 text-gray-800 px-3 py-2 rounded-lg max-w-[70%] break-words"
               >
-                <ReactMarkdown>
+                <ReactMarkdown
+                  components={{
+                    p: ({ children }) => (
+                      <p className="m-0 leading-relaxed">{children}</p>
+                    ),
+                    ul: ({ children }) => (
+                      <ul className="list-disc list-inside m-0">{children}</ul>
+                    ),
+                    li: ({ children }) => <li className="m-0">{children}</li>,
+                  }}
+                >
                   {typeof msg.text === "string"
-                    ? msg.text
-                        .replace(/\n{2,}/g, "\n") // replace 2+ consecutive newlines with a single newline
-                        .trim() // remove leading/trailing whitespace
+                    ? msg.text.replace(/\n{2,}/g, "\n").trim()
                     : ""}
                 </ReactMarkdown>
               </div>
             ) : (
               <div
                 key={index}
-                className="self-end bg-blue-500 text-white px-3 py-2 rounded-lg max-w-[70%] break-words whitespace-pre-wrap"
+                className="self-end bg-blue-500 text-white px-3 py-2 rounded-lg max-w-[70%] break-words"
               >
                 {msg.text}
               </div>
