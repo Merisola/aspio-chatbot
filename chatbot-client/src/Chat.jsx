@@ -1,17 +1,18 @@
 import { useState, useRef, useEffect } from "react";
 import ReactMarkdown from "react-markdown";
-  import axios from "axios";
+import axios from "axios";
 
 export default function Chat() {
   const [messages, setMessages] = useState([
     {
       role: "bot",
       text: `You can ask things like:
-- Tell me about Aspio
-- What is Aspio?
-- What is booking?
-- How does Aspio help my business?
-- What is the advantage of booking for my business?`,
+- How does Aspio work and what problems does it solve?
+- What makes Aspio unique compared to other business platforms?
+- What does booking mean in Aspio’s system?
+- In what ways can Aspio improve efficiency and customer experience for my business?
+- What business benefits come from using Aspio’s booking feature?
+- What common questions do businesses have when starting with Aspio?`,
     },
   ]);
 
@@ -27,7 +28,6 @@ export default function Chat() {
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
-
 
   const sendMessage = async () => {
     if (!input.trim() || isLoading) return;
