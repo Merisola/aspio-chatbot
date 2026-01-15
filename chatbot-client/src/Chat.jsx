@@ -41,7 +41,7 @@ const [messages, setMessages] = useState([
     setError(null);
 
     try {
-      const res = await fetch("/api/chat", {
+      const res = await fetch("https://chatbotfastapi-production-7dff.up.railway.app/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
