@@ -74,7 +74,7 @@ export default function Chat() {
     <div className="min-h-screen bg-gray-100 flex items-center justify-center">
       <div className="w-full max-w-md bg-white rounded-xl shadow p-4 flex flex-col">
         {/* Messages */}
-        <div className="flex-1 overflow-y-auto mb-4 space-y-2 flex flex-col max-h-[300px]">
+        <div className="flex-1 overflow-y-auto mb-4 space-y-2 flex flex-col max-h-[375px]">
           {messages.map((msg, index) =>
             msg.role === "bot" ? (
               <div
