@@ -1,18 +1,19 @@
 import { useState, useRef, useEffect } from "react";
 import ReactMarkdown from "react-markdown";
+  import axios from "axios";
 
 export default function Chat() {
-const [messages, setMessages] = useState([
-  {
-    role: "bot",
-    text: `You can ask things like:
+  const [messages, setMessages] = useState([
+    {
+      role: "bot",
+      text: `You can ask things like:
 - Tell me about Aspio
 - What is Aspio?
 - What is booking?
 - How does Aspio help my business?
 - What is the advantage of booking for my business?`,
-  },
-]);
+    },
+  ]);
 
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -27,6 +28,7 @@ const [messages, setMessages] = useState([
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
+
   const sendMessage = async () => {
     if (!input.trim() || isLoading) return;
 
@@ -34,26 +36,19 @@ const [messages, setMessages] = useState([
     setMessages((prev) => [...prev, userMessage]);
     setInput("");
 
-    // Reset textarea height
-    if (textareaRef.current) textareaRef.current.style.height = "2.5rem";
-
     setIsLoading(true);
     setError(null);
 
     try {
-      const res = await fetch("https://chatbotfastapi-production-7dff.up.railway.app/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          message: userMessage.text,
-          session_id: sessionId.current,
-        }),
+      const res = await axios.post("/api/chat", {
+        message: userMessage.text,
+        session_id: sessionId.current,
       });
 
-      if (!res.ok) throw new Error("Network response not OK");
-
-      const data = await res.json();
-      setMessages((prev) => [...prev, { role: "bot", text: data.response }]);
+      setMessages((prev) => [
+        ...prev,
+        { role: "bot", text: res.data.response },
+      ]);
     } catch (err) {
       console.error(err);
       setError("Bot is having a hard time right now.");
